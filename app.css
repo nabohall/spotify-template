@@ -1,5 +1,7 @@
 body {
   padding:10px;
+  font-size: 14px;
+  font-family: Helvetica, sans-serif;
 }
 
 #login-btn {
@@ -16,6 +18,30 @@ nav {
 	font-size: 1.5em;
 }
 
-.navbar-brand {
-	padding-top: 10px;
+#album_art{
+	max-width: 75%;
+	max-height: 75%;
+}
+
+#initial {
+	font-size: 1.5em;
+	font-weight: bold;
+}
+
+#initial>ul {
+	font-size: 14px;
+	font-weight: normal;
+}
+
+ul:nth-child(2){
+	background-color: #ff0000;
+}
+
+#artistList, #artistInfo {
+	margin-top: 1em;
+} 
+
+.track:hover{
+	text-decoration: underline;
+	color:#21598f;
 }

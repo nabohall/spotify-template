@@ -7,6 +7,8 @@
 	<title>Spotify Template</title>
 	
 	<!-- Include libraries -->
+	<!-- load the d3.js library -->	
+	<script src="http://d3js.org/d3.v3.min.js"></script>
 	<script src="https://code.jquery.com/jquery.min.js"></script>
 	<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css" rel="stylesheet" type="text/css" />
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
@@ -31,59 +33,52 @@
 				<i class="fa fa-spotify"></i>
 			</a>
 		</div>
-		<form class="navbar-form navbar-right" role="search">
-		  <div class="form-group">
-		  	<label>Log In:</label>
-		    <input type="text"  name="username" class="form-control" placeholder="Username">
-		  </div>
-		  <div class="form-group">
-		  	<label>Password:</label>
-		  	<input type="password" name="password" class="form-control" placeholder="Password">
-		  </div>
-		  <button type="submit" id="login-btn" class="btn btn-default">Submit</button>
-		</form>
+		<h3>Find New Music!</h2>
 	</nav>
 	<!-- Initiate app -->
 	<div ng-app="myApp" ng-controller="myCtrl">
 		<!-- Form -->
 		<form class="container" name="songForm">
+			<h3>Either Look Up An Artist You Know,</h3>
 			<div class="form-group">
-				<label>Artist:</label>
-				<input name="artist" placeholder="Search artist" ng-model="artistQuery" class="form-control"></input>
+				<input name="artist" ng-minlength="2" placeholder="Search artist" ng-model="artistQuery" class="form-control"></input>
+				<p ng-show="songForm.artist.$error.minlength" class="help-block">Need at least one letter and a wildcard (*).</p>
 			</div>
 			<div class="form-group">
 				<button ng-disabled="songForm.search.$invalid" class="btn btn-primary" ng-click="getArtist()" type="submit">Submit</button>
 			</div>
-			<div class="form-group">
-				<button ng-click="randomize()" type="button" class="btn btn-danger">Find Random Artist!!</button>
-			</div>
 		</form>
+		<div class="container">
+			<h3>Or find a new one!</h3>
+			<button ng-click="randomize()" class="btn btn-warning" type button>Get random artist!</button>
+		</div>
 		
 		<!-- Results -->
 		<div class="container-fixed">
 			<div class="row">
-				<div class="col-xs-6">
+				<div class="col-xs-12 col-md-6">
 					
-					<ul>
-						<li id="{{artistInitial.id}}" class="" ng-click="displayInfo($event)" title="{{artistInitial.name}}">{{artistInitial.name}}</li>
+					<ul id="artistList" ng-show="artistInitial">
+						<li class="{{artistInitial.id}}" id="initial" ng-click="displayInfo($event)" title="{{artistInitial.name}}">{{artistInitial.name}}</li>
 					</ul>
 				</div>
-				<div class="col-xs-6" ng-show="showInfo">
-					<h2>{{artistName}}</h2>
-					<img src="{{artistImg}}" alt="album art"/>
+				<div class="col-xs-12 col-md-6" ng-show="showInfo">
+					<h2 id="artistInfo">{{artistName}}</h2>
+					<img src="{{artistImg}}" id="album_art" alt="album art"/>
 					<h4>Top Songs: </h4>
 					<div class="help-block">
-						<span ng-show="tracks.length>0">Click to sample</span>
+						<span ng-show="topTracks.length>0">Click to sample</span>
 						<span ng-show="currentSong && !audioObject.paused">(playing)</span>
 					</div>
 					<ul>
 						<li ng-repeat="track in topTracks" class="track" ng-click="play(track.preview_url)" title="{{track.name}}">{{track.name}}</li>
 					</ul>
-					<h4>Genres:</h4>
-					<p ng-repeat="genre in artistGenres">{{genre| uppercase}}</p>
+					<h4 ng-show="artistGenres.length>0">Genres:</h4>
+					<p ng-repeat="genre in artistGenres">{{genre}}</p>
 					<h4>Popularity:</h4>
 					<p>{{artistPop}}</p>
 				</div>
+
 			</div>			
 		</div>
 
